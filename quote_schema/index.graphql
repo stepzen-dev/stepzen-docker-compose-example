@@ -1,0 +1,8 @@
+type Quote {
+  price: Float
+  symbol: String
+}
+
+type Query {
+  getQuote(symbol: String): Quote @rest(method: POST, endpoint: "http://quote")
+}

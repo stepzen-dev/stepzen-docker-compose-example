@@ -1,0 +1,74 @@
+type Portfolio {
+  nshares: Int!
+  symbol: String!
+}
+
+type Query {
+  getPortfolioList: [Portfolio]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "portfolio"
+      configuration: "portfolio_schema_config"
+    )
+  """
+  This query is an example of how to simply paginate your responses.
+  """
+  getPaginatedPortfolioList(first: Int!, after: Int!): [Portfolio]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "public"."portfolio" limit $1 offset $2
+      """
+      configuration: "portfolio_schema_config"
+    )
+  """
+  In this example, a single query parameter is passed. If the request to the DB will
+  return at most one value you can remove the square brackets from the result.
+  """
+  getPortfolioByNshares(nshares: Int!): [Portfolio]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "public"."portfolio" where "nshares" = $1
+      """
+      configuration: "portfolio_schema_config"
+    )
+  """
+  In this example, two query parameters are passed. If the request to the DB will
+  return at most one value you can remove the square brackets from the result.
+  """
+  getPortfolioByNsharesAndSymbol(nshares: Int!, symbol: String!): [Portfolio]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "public"."portfolio" where "nshares" = $1 and "symbol" = $2
+      """
+      configuration: "portfolio_schema_config"
+    )
+}
+
+type Mutation {
+  """
+  In this mutation example you can see how to do a mutation to insert data in the database.
+  """
+  insertPortfolio(symbol: String!, nshares: Int!): Portfolio
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "portfolio"
+      dml: INSERT
+      configuration: "portfolio_schema_config"
+    )
+  """
+  In this mutation example you can see how to do a mutation to delete data from the database.
+  """
+  deletePortfolio(symbol: String!, nshares: Int!): Portfolio
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "portfolio"
+      dml: DELETE
+      configuration: "portfolio_schema_config"
+    )
+}

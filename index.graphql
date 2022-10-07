@@ -1,0 +1,6 @@
+schema
+  @sdl(
+    files: ["portfolio_schema/index.graphql", "quote_schema/index.graphql"]
+  ) {
+  query: Query
+}

@@ -1,0 +1,9 @@
+{
+    "name": "report",
+    "scripts": {
+      "start": "node report.js"
+    },
+    "dependencies": {
+        "node-fetch": "2.6.7"
+    }
+}

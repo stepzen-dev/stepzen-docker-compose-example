@@ -1,0 +1,6 @@
+{
+   "name": "quote-service",
+   "dependencies": {
+      "express": "^4.13"
+   }
+}

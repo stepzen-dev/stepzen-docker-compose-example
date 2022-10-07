@@ -1,0 +1,4 @@
+configurationset:
+  - configuration:
+      name: portfolio_schema_config
+      uri: postgresql://portfolio/portfolio?user=c&password=c

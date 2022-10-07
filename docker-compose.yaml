@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  portfolio:
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=c
+      - POSTGRES_PASSWORD=c
+      - POSTGRES_DB=portfolio
+    volumes:
+      - ./portfolio:/docker-entrypoint-initdb.d/
+  quote:
+    image: node:latest
+    working_dir: "/quote"
+    volumes:
+      - "./quote:/quote"
+    command: [ "sh", "-c", "npm install; npm start"]
+  stepzen:
+    image: us-docker.pkg.dev/stepzen-public/images/stepzen:production
+    environment:
+      - STEPZEN_CONTROL_DB_DSN=postgresql://stepzen:pw@stepzen_metadata/stepzen
+    ports:
+      - "9000:9000"
+    depends_on:
+      - portfolio
+      - quote
+      - stepzen_metadata
+  stepzen_metadata:
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=stepzen
+      - POSTGRES_PASSWORD=pw
+      - POSTGRES_DB=stepzen
+  report:
+    image: node:18
+    working_dir: "/report"
+    volumes:
+      - "./report:/report"
+    command: [ "sh", "-c", "npm install; node report.js"]
+    depends_on: 
+      - stepzen
